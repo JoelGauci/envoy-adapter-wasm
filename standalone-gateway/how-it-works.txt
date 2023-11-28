@@ -1,0 +1,58 @@
+@startuml
+
+title "Apigee Adapter for Envoy - How it works?"
+
+
+entity "Client App" as capp
+
+entity "Envoy API Gateway" as eag
+box "Envoy Adapter" #LightGreen
+entity "Apigee Adapter for Envoy" as ea
+end box
+box "Apigee Platform" #LightBlue
+entity "API proxy: remote-service" as apigee
+entity "API proxy: remote-token" as rt
+entity "Apigee Analytics" as ax
+end box
+participant "Backend API" as backend
+
+note over eag,rt: Polling
+ea --> apigee: Get API Products
+ea --> apigee: Refresh API keys
+ea --> apigee: Refresh Quotas
+eag --> rt: Get JWKS keys
+
+note over capp,backend: Request/Response Processing
+capp -> rt: POST /token (grant type = client_credentials)
+activate rt
+rt -> rt: authenticate client app
+deactivate rt
+rt -> capp: deliver JWT token with client_id as claim + audience
+
+capp -> eag: GET /random/v1/users\n(Authorization: Bearer <JWT>)
+activate eag
+eag -> eag: verify JWT\nusing JWT authentication filter + JWKS
+deactivate eag
+
+eag -> ea: External Authorization (gRPC)\nusing Ext-Authz filter
+activate ea
+ea -> ea: extract API key from JWT (claim)
+ea -> apigee: verify unknown API key
+apigee -> ea: internal JWT
+ea -> ea: identify API Products
+ea -> ea: Quota Enforcement
+deactivate ea
+ea -> eag: response with the right status code: 200|403|429
+
+eag -> backend: request (ok)
+backend -> eag: response
+eag -> capp: response
+
+note over eag,apigee: Analytics Reporting
+eag --> ea: AccessLog
+activate ea
+ea --> ea: spool
+ea --> ax: push Analytics
+deactivate ea
+
+@enduml

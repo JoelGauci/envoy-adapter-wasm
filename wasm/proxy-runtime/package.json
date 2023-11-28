@@ -1,0 +1,52 @@
+{
+  "scripts": {
+    "asbuild:debug": "asc assembly/index.ts -b build/untouched.wasm --use abort=abort_proc_exit -t build/untouched.wat --sourceMap http://127.0.0.1:8081/build/untouched.wasm.map --debug",
+    "asbuild:release": "asc assembly/index.ts -b build/optimized.wasm --use abort=abort_proc_exit -t build/optimized.wat --sourceMap --optimize",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "server": "ws --log.format dev",
+    "docs": "typedoc --out ./docs assembly --ignoreCompilerErrors --name 'AssemblyScript Proxy Runtime'"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.19.23",
+    "http-server": "^0.12.3",
+    "local-web-server": "^3.0.7",
+    "minimist": ">=1.2.2",
+    "typedoc": "^0.16.11"
+  },
+  "name": "@solo-io/proxy-runtime",
+  "description": "Use this SDK to write extensions for the proxy WASM ABI",
+  "version": "0.1.15",
+  "main": "assembly/index.ts",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solo-io/proxy-runtime.git"
+  },
+  "keywords": [
+    "wasm",
+    "proxy"
+  ],
+  "author": "Yuval Kohavi",
+  "license": " Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/solo-io/proxy-runtime/issues"
+  },
+  "homepage": "https://github.com/solo-io/proxy-runtime#readme",
+  "files": [
+    "/assembly",
+    "package-lock.json",
+    "index.js"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./build/release.js",
+      "types": "./build/release.d.ts"
+    }
+  },
+  "dependencies": {
+    "@solo-io/proxy-runtime": "^0.1.15"
+  }
+}
