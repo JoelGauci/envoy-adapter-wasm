@@ -1,4 +1,4 @@
-# Apigee Envoy Adapater & WASM
+# Apigee Envoy Adapter & WASM
 
 ## How the Apigee Envoy Adapter works
 
