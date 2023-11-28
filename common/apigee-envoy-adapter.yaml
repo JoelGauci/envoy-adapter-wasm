@@ -87,11 +87,11 @@ spec:
       - name: analytics-secret
         secret:
           defaultMode: 420
-          secretName: bap-emea-apigee-1-prod-analytics-secret
+          secretName: ${APIGEE_X_ORG}-${APIGEE_X_ENV}-analytics-secret
       - name: policy-secret
         secret:
           defaultMode: 420
-          secretName: bap-emea-apigee-1-prod-policy-secret
+          secretName: ${APIGEE_X_ORG}-${APIGEE_X_ENV}-policy-secret
 ---
 apiVersion: v1
 kind: Service
