@@ -70,8 +70,8 @@ static_resources:
                       uri: https://${APIGEE_X_HOSTNAME}/remote-token/certs
                       cluster: apigee-auth-service
                       timeout: 5s
-                  cache_duration:
-                    seconds: 300
+                    cache_duration:
+                      seconds: 300
                   payload_in_metadata: https://${APIGEE_X_HOSTNAME}/remote-token/token
               rules:
               - match:
